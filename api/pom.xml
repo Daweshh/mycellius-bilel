@@ -6,7 +6,7 @@
 
     <groupId>fr.mycellius</groupId>
     <artifactId>api</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>0.0.1-SNAPSHOT</version>
 
     <properties>
         <maven.compiler.source>25</maven.compiler.source>
@@ -15,6 +15,19 @@
     </properties>
 
     <dependencies> <!-- autres dépendances éventuelles -->
+
+        <!-- Spring Web pour exposer des endpoints HTTP REST -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Tests Spring Boot (on gardera aussi JUnit qui est déjà là) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
@@ -22,5 +35,12 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/> <!-- recherche le parent dans le repo central -->
+    </parent>
 
 </project>

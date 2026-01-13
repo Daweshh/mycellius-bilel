@@ -1,8 +1,12 @@
 package fr.mycellius.service;
+import fr.mycellius.domain.Tag;
 import fr.mycellius.repository.InMemoryWiki;
 import fr.mycellius.domain.exception.PageNotFoundException;
 import fr.mycellius.domain.WikiPage;
+import org.springframework.stereotype.Service;
 import java.util.List;
+
+@Service
 public class WikiService {
     private final InMemoryWiki repository;
     public WikiService(InMemoryWiki repository) {
@@ -14,7 +18,6 @@ public class WikiService {
 
     /**
      * Crée une nouvelle page wiki.
-     *
      * Règles :
      * - id obligatoire, non vide (WikiPage se charge déjà de vérifier ça)
      * - title obligatoire, propre (géré par WikiPage)
@@ -25,13 +28,19 @@ public class WikiService {
      * @param content contenu initial (peut être vide mais pas null)
      * @return la page créée
      */
+
     public WikiPage createPage(String id, String title, String content) {
+        return createPage(id, title, content, List.of());
+    }
+
+    public WikiPage createPage(String id, String title, String content, List<Tag> tag) {
         if (repository.existsById(id)) {
             throw new IllegalArgumentException("Une page existe déjà avec l'id " + id);
         }
         WikiPage page = new WikiPage(id, title, content);
         return repository.save(page);
     }
+
     /**
      * Retourne la page correspondant à l'id fourni.
      *
