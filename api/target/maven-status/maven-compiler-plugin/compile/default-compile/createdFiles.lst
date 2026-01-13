@@ -1,0 +1,4 @@
+fr\mycellius\MycelliusApiApplication.class
+fr\mycellius\web\HealthController.class
+fr\mycellius\web\CreatePageRequest.class
+fr\mycellius\web\WikiPageController.class

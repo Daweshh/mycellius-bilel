@@ -5,12 +5,14 @@ import fr.mycellius.domain.WikiPage;
 import org.junit.jupiter.api.Test;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
+import fr.mycellius.domain.Tag;
+
 public class WikiServiceTest {
     @Test
     void createPage_nominal_cree_une_page() {
         InMemoryWiki repo = new InMemoryWiki();
         WikiService service = new WikiService(repo);
-        WikiPage page = service.createPage("PAGE-001", "Installation Docker", "contenu");
+        WikiPage page = service.createPage("PAGE-001", "Installation Docker", "contenu", List.of(new Tag("tagdocker")));
         assertEquals("PAGE-001", page.getId());
         assertEquals("Installation Docker", page.getTitle());
         assertEquals(1, repo.findAll().size());
