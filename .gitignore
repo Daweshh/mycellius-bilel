@@ -2,3 +2,17 @@
 node_modules/
 .DS_Store
 .idea/
+
+# IntelliJ / IDE
+.idea/
+*.iml
+
+# Maven / Java build
+**/target/
+/target/
+
+
+# MySQL (Docker) - données locales (NE PAS VERSIONNER)
+infra/db/data/
+infra/db/backups/
+
