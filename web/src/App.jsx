@@ -1,0 +1,60 @@
+import React from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { AuthProvider, useAuth } from "./auth/AuthContext";
+import ForbiddenPage from "./pages/ForbiddenPage";
+import LoginPage from "./pages/LoginPage";
+import PagesListPage from "./pages/PagesListPage";
+import PageDetailPage from "./pages/PageDetailPage";
+import PageFormPage from "./pages/PageFormPage";
+
+function RequireAuth({ children }) {
+ const { token } = useAuth();
+ if (!token) return <Navigate to="/login" replace />;
+ return children;
+}
+
+export default function App() {
+ return (
+ <AuthProvider>
+ <BrowserRouter>
+ <Routes>
+ <Route path="/login" element={<LoginPage />} />>
+ <Route path="/forbidden" element={<ForbiddenPage />} />
+ <Route
+  path="/pages"
+  element={
+  <RequireAuth>
+  <PagesListPage />
+  </RequireAuth>
+  }
+ />
+ <Route
+  path="/pages/new"
+  element={
+  <RequireAuth>
+  <PageFormPage mode="create" />
+  </RequireAuth>
+  }
+ />
+ <Route
+  path="/pages/:id/edit"
+  element={
+  <RequireAuth>
+  <PageFormPage mode="edit" />
+  </RequireAuth>
+  }
+ />
+ <Route
+  path="/pages/:id"
+  element={
+  <RequireAuth>
+  <PageDetailPage />
+  </RequireAuth>
+  }
+ />
+ <Route path="*" element={<Navigate to="/pages" replace />} />
+ </Routes>
+ </BrowserRouter>
+ </AuthProvider>
+ );
+}
