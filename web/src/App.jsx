@@ -18,7 +18,7 @@ export default function App() {
  <AuthProvider>
  <BrowserRouter>
  <Routes>
- <Route path="/login" element={<LoginPage />} />>
+ <Route path="/login" element={<LoginPage />} />
  <Route path="/forbidden" element={<ForbiddenPage />} />
  <Route
   path="/pages"

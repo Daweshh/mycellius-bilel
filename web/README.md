@@ -1,16 +1,57 @@
-# React + Vite
+# Mycellius – Front web
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Lancer tout le projet en local
 
-Currently, two official plugins are available:
+### 1) Base de donnees (MySQL via Docker)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+cd infra/db
+docker compose up -d
+```
 
-## React Compiler
+### 2) API Spring Boot
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+cd api
+mvn spring-boot:run
+```
 
-## Expanding the ESLint configuration
+API disponible sur `http://localhost:8080`.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+### 3) Front web (Vite)
+
+```bash
+cd web
+npm install
+npm run dev
+```
+
+Par défaut, Vite démarre sur `http://localhost:5173`.
+Le site est donc visible sur `http://localhost:5173`.
+
+### Comptes de test (seed)
+
+Ces comptes sont crees automatiquement par l'API au demarrage (si `mycellius.seed.enabled=true`).
+
+| Username | Password | Role |
+| --- | --- | --- |
+| `admin` | `Admin123!` | `ADMIN` |
+| `dev` | `Dev123!` | `DEV` |
+| `stagiaire` | `Stagiaire123!` | `STAGIAIRE` |
+
+## Rendu Markdown sécurisé
+
+Le composant `SafeMarkdown` utilise `marked` pour parser le Markdown et `DOMPurify` pour nettoyer le HTML avant affichage.
+
+## Scan de sécurité avec OWASP ZAP (TP11)
+
+Une commande utilitaire est définie dans `package.json` sous le script `zap:baseline`.
+
+1. Assurez-vous que le front est lancé en local (ex. `npm run dev` sur le port 5173).
+2. Depuis le répertoire `web`, exécutez :
+
+```bash
+npm run zap:baseline
+```
+
+Cela lance le conteneur `owasp/zap2docker-stable` en mode baseline sur `http://host.docker.internal:5173` et génère un rapport `zap-report.html` dans le dossier `zap-report`.

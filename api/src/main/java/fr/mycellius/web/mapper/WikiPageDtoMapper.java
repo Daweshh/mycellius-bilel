@@ -12,7 +12,7 @@ import org.mapstruct.Mapping;
 public interface WikiPageDtoMapper {
 
     // DTO -> Domain
-    @Mapping(target = "createdAt", ignore = true) // si WikiPage n'a pas createdAt, enlève cette ligne
+    @Mapping(target = "createdAt", ignore = true)
     WikiPage toDomain(CreateWikiPageRequest request);
 
     // DTO -> Domain pour 1 tag
@@ -22,7 +22,10 @@ public interface WikiPageDtoMapper {
     }
 
     // Domain -> DTO
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "tags", expression = "java(java.util.List.of())")
     WikiPageResponse toResponse(WikiPage page);
+
+    // Conversion Tag -> String pour les tags en sortie
+    default String map(Tag tag) {
+        return tag == null ? null : tag.getValue();
+    }
 }

@@ -24,15 +24,32 @@ export default function LoginPage() {
  }
  }
  return (
- <div style={{ padding: 24 }}>
- <h2>Mycellius — Login</h2>
- <form onSubmit={onSubmit} style={{ display: "grid", gap: 12, maxWidth: 320 }}>
- <input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="username" />
- <input value={password} onChange={(e) => setPassword(e.target.value)} placeholder="password"
-type="password" />
- <button type="submit">Se connecter</button>
- </form>
- {error && <p style={{ marginTop: 12 }}>{String(error)}</p>}
- </div>
- );
+    <div className="page-shell">
+      <div className="topbar">
+        <span className="brand">Mycellius</span>
+        <span className="topbar-meta">Pastel Edition</span>
+      </div>
+      <div className="panel">
+        <h2 className="page-title">Mycellius - Login</h2>
+        <p className="meta-line">Connecte-toi pour acceder a la base wiki.</p>
+        <form onSubmit={onSubmit} className="form-grid" style={{ maxWidth: 360 }}>
+          <input
+            className="field"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            placeholder="username"
+          />
+          <input
+            className="field"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="password"
+            type="password"
+          />
+          <button type="submit" className="btn btn-primary">Se connecter</button>
+        </form>
+        {error && <p className="error-text" style={{ marginTop: 12 }}>{String(error)}</p>}
+      </div>
+    </div>
+  );
 }

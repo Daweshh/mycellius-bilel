@@ -9,6 +9,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 import org.springframework.web.cors.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -24,6 +26,13 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
+                .headers(headers -> headers
+                        .frameOptions(frame -> frame.deny())
+                        .contentTypeOptions(Customizer.withDefaults())
+                        .referrerPolicy(ref -> ref.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER))
+                        .xssProtection(xss -> xss.headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK))
+                        .cacheControl(Customizer.withDefaults())
+                )
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(b -> b.disable())
                 .formLogin(f -> f.disable())
@@ -32,14 +41,20 @@ public class SecurityConfig {
                                 // Public
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/health", "/actuator/health").permitAll()
+                                .requestMatchers("/api/version").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 // Swagger/OpenAPI
                                 .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                                // Audit: ADMIN only
+                                .requestMatchers(HttpMethod.GET, "/api/v1/audit/**").hasRole("ADMIN")
                                 // RBAC Pages
                                 .requestMatchers(HttpMethod.GET, "/api/v1/pages/**")
                                 .hasAnyRole("STAGIAIRE", "DEV", "ADMIN")
                                 .requestMatchers(HttpMethod.POST, "/api/v1/pages/**")
                                 .hasAnyRole("DEV", "ADMIN")
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/pages/**")
+                                .hasAnyRole("DEV", "ADMIN")
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/pages/**")
                                 .hasAnyRole("DEV", "ADMIN")
                                 .anyRequest().authenticated()
                 )
