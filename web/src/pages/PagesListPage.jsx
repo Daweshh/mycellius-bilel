@@ -86,7 +86,7 @@ export default function PagesListPage() {
                 ))}
               </div>
             )}
-            {(role === "DEV" || role === "ADMIN") && (
+            {(role === "ADMIN") && (
               <button className="btn btn-soft" onClick={() => onDelete(p.id)}>
                 Supprimer
               </button>
