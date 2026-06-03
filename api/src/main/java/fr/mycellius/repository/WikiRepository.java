@@ -9,4 +9,5 @@ public interface WikiRepository {
     WikiPage getById(String id);
     Page<WikiPage> findAll(Pageable pageable);
     Page<WikiPage> searchByTitle(String title, Pageable pageable);
+    void deleteById(String id);
 }

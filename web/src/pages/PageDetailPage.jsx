@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { apiRequest, ApiError } from "../api/apiClient";
 import { useAuth } from "../auth/AuthContext";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import SafeMarkdown from "../components/SafeMarkdown";
 
 export default function PageDetailPage() {
  const { id } = useParams();
@@ -20,15 +21,30 @@ export default function PageDetailPage() {
  }
  load();
  }, [id, token, logout, navigate]);
- if (!page) return <div style={{ padding: 24 }}>Chargement...</div>;
+ if (!page) return <div className="panel">Chargement...</div>;
  return (
- <div style={{ padding: 24 }}>
- <h2>{page.title}</h2>
- <p><b>ID</b> : {page.id}</p>
- <pre style={{ whiteSpace: "pre-wrap" }}>{page.content}</pre>
+ <div className="page-shell">
+ <div className="topbar">
+ <span className="brand">Mycellius</span>
+ <Link className="btn btn-soft" to="/pages">Retour a la liste</Link>
+ </div>
+ <div className="panel">
+ <h2 className="page-title">{page.title}</h2>
+ <p className="meta-line"><b>ID</b> : {page.id}</p>
+      {(page.tags?.length ?? 0) > 0 && (
+        <div className="tag-row">
+          {page.tags.map((tag) => (
+            <span className="tag-pill" key={`${page.id}-${tag}`}>{tag}</span>
+          ))}
+        </div>
+      )}
+      <div className="markdown-card">
+        <SafeMarkdown markdown={page.content} />
+      </div>
  {(role === "DEV" || role === "ADMIN") && (
- <p><Link to={`/pages/${page.id}/edit`}>Éditer</Link></p>
+ <p><Link className="btn btn-soft" to={`/pages/${page.id}/edit`}>Editer</Link></p>
  )}
+ </div>
  </div>
  );
 }

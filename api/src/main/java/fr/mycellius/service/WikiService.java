@@ -37,4 +37,23 @@ public class WikiService {
     public Page<WikiPage> searchByTitle(String fragment, Pageable pageable) {
         return repository.searchByTitle(fragment, pageable);
     }
+
+    public WikiPage updatePage(String id, WikiPage page) {
+        if (page == null) {
+            throw new IllegalArgumentException("La page est obligatoire");
+        }
+        WikiPage existing = repository.getById(id);
+        if (existing == null) {
+            throw new PageNotFoundException(id);
+        }
+        page.setId(id);
+        if (page.getCreatedAt() == null) {
+            page.setCreatedAt(existing.getCreatedAt());
+        }
+        return repository.save(page);
+    }
+
+    public void deletePage(String id) {
+        repository.deleteById(id);
+    }
 }
