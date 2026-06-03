@@ -55,7 +55,7 @@ public class SecurityConfig {
                                 .requestMatchers(HttpMethod.PUT, "/api/v1/pages/**")
                                 .hasAnyRole("DEV", "ADMIN")
                                 .requestMatchers(HttpMethod.DELETE, "/api/v1/pages/**")
-                                .hasAnyRole("DEV", "ADMIN")
+                                .hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService),
